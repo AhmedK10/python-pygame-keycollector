@@ -50,6 +50,22 @@ def actors():
         key.draw()
 
 
+def bg():
+    for y in range(height_grid):
+        for x in range(width_grid):
+            screen.blit("floor1", coords(x, y))
+
+#making the sceneary (each tile's skeleton background):
+def scene():
+    for y in range(height_grid):
+        for x in range(width_grid):
+            #extracting the chracter from the map list:
+            sq = MAP[y][x]
+            if sq == "W":
+                screen.blit("wall", coords(x, y))
+            elif sq == "D":
+                screen.blit("door", coords(x, y))
+
 #this function is part of the game loop and used to draw all tiles:
 def draw():
     bg()
