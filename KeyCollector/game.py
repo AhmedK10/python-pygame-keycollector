@@ -28,6 +28,34 @@ MAP = ["WWWWWWWWWWWWWWWW",
 def coords(x, y):
     return (size_grid * x, size_grid * y)
 
+#creating an actor with an initial position:
+def init():
+    global player, keys_ingame
+    keys_ingame = []
+    player = Actor("player", anchor=("left", "top"))
+    for y in range(height_grid):
+        for x in range(width_grid):
+            #locate player position and extract it:
+            sq = MAP[y][x]
+            if sq == "P":
+                player.pos = coords(x, y)
+            #create a key:
+            elif sq == "K":
+                key = Actor("key", anchor=("left", "top"), pos=coords(x, y))
+                keys_ingame.append(key)
 
+def actors():
+    player.draw()
+    for key in keys_ingame:
+        key.draw()
+
+
+#this function is part of the game loop and used to draw all tiles:
+def draw():
+    bg()
+    scene()
+    actors()
+
+init()
 
 pgzrun.go()
