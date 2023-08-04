@@ -62,6 +62,10 @@ def actors():
     for key in keys_ingame:
         key.draw()
 
+#GAMEOVER msg:
+def game_over():
+    screen_middle = (WIDTH / 2, HEIGHT / 2)
+    screen.draw.text("GAME OVER", midbottom=screen_middle, fontsize=size_grid, color="red", owidth=1)
 
 def bg():
     for y in range(height_grid):
@@ -84,6 +88,9 @@ def draw():
     bg()
     scene()
     actors()
+    if gm_over:
+        game_over()
+
 
 init()
 
