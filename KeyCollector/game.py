@@ -28,10 +28,18 @@ MAP = ["WWWWWWWWWWWWWWWW",
 def coords(x, y):
     return (size_grid * x, size_grid * y)
 
+#current player coords:
+def item_coords(actor):
+    current_x = actor.x / size_grid
+    current_y = actor.y / size_grid
+    return (round(current_x), round(current_y))
+
 #creating an actor with an initial position:
 def init():
-    global player, keys_ingame
+    global player, enemies, keys_ingame, gm_over
     keys_ingame = []
+    enemies = []
+    gm_over = False
     player = Actor("player", anchor=("left", "top"))
     for y in range(height_grid):
         for x in range(width_grid):
@@ -39,6 +47,9 @@ def init():
             sq = MAP[y][x]
             if sq == "P":
                 player.pos = coords(x, y)
+            elif sq == "G":
+                enemy = Actor("guard", anchor=("left", "top"), pos=coords(x, y))
+                enemies.append(enemy)
             #create a key:
             elif sq == "K":
                 key = Actor("key", anchor=("left", "top"), pos=coords(x, y))
@@ -46,6 +57,8 @@ def init():
 
 def actors():
     player.draw()
+    for enemy in enemies:
+        enemy.draw()
     for key in keys_ingame:
         key.draw()
 
