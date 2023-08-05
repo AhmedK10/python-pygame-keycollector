@@ -144,6 +144,33 @@ def player_mover(dx, dy):
     #update the position to new one:
     player.pos = coords(x, y)
 
+#moving the enemy while checking position relative to player:
+def enemy_mover(enemy):
+    global gm_over
+    if gm_over:
+        return
+    (x_player, y_player) = item_coords(player)
+    (x_enemy, y_enemy) = item_coords(enemy)
+
+    if x_player < x_enemy and MAP[y_enemy][x_enemy - 1] != "W":
+        x_enemy -= 1
+    elif x_player > x_enemy and MAP[y_enemy][x_enemy + 1] != "W":
+        x_enemy += 1
+    elif y_player > y_enemy and MAP[y_enemy + 1][x_enemy] != "W":
+        y_enemy += 1
+    elif y_player < y_enemy and MAP[y_enemy - 1][x_enemy] != "W":
+        y_enemy -= 1
+
+    enemy.pos = coords(x_enemy, y_enemy)
+    if x_enemy == x_player and y_enemy == y_player:
+        gm_over = True
+
+#moves all enemies in turn:
+def enemies_mover():
+    for enemy in enemies:
+        enemy_mover(enemy)
+
 init()
+clock.schedule_interval(enemies_mover, enemy_move_secs)
 
 pgzrun.go()
