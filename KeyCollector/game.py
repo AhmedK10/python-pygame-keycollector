@@ -66,10 +66,16 @@ def actors():
     for key in keys_ingame:
         key.draw()
 
-#GAMEOVER msg:
+#Messages during game:
 def game_over():
     screen_middle = (WIDTH / 2, HEIGHT / 2)
-    screen.draw.text("GAME OVER", midbottom=screen_middle, fontsize=size_grid, color="red", owidth=1)
+    screen.draw.text("GAME OVER", midbottom=screen_middle, fontsize=size_grid, color="gray", owidth=3)
+    if won:
+        screen.draw.text("You WON!!!", midtop=screen_middle, fontsize=size_grid, color="green", owidth=1)
+    else:
+        screen.draw.text("YOU DIED :(", midtop=screen_middle, fontsize=size_grid, color="red", owidth=1)
+
+    screen.draw.text("Press SPACEBAR to Restart", midtop=(WIDTH / 2, size_grid + HEIGHT / 2), fontsize=size_grid / 2, color="gray", owidth=2)
 
 def bg():
     for y in range(height_grid):
@@ -95,6 +101,48 @@ def draw():
     if gm_over:
         game_over()
 
+#restarting automatically:
+def on_key_up(key):
+    if key == keys.SPACE and gm_over:
+        init()
+
+#detect keyboard key press and moves player:
+def on_key_down(key):
+    if key == keys.UP:
+        player_mover(0, -1)
+    elif key == keys.DOWN:
+        player_mover(0, 1)
+    elif key == keys.LEFT:
+        player_mover(-1, 0)
+    elif key == keys.RIGHT:
+        player_mover(1, 0)
+
+def player_mover(dx, dy):
+    global gm_over, won
+    if gm_over:
+        return
+    #getting current player position:
+    (x, y) = item_coords(player)
+    x = x + dx
+    y = y + dy
+    #getting the tile at the this position:
+    sq = MAP[y][x]
+    if sq == "W":
+        return
+    elif sq == "D":
+        if len(keys_ingame) > 0:
+            return
+        else:
+            gm_over = True
+            won = True
+    #looping over each key in the list:
+    for key in keys_ingame:
+        (x_key, y_key) = item_coords(key)
+        if x == x_key and y == y_key:
+            keys_ingame.remove(key)
+            break
+    #update the position to new one:
+    player.pos = coords(x, y)
 
 init()
 
