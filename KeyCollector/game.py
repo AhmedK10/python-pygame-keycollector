@@ -1,5 +1,7 @@
 import pgzrun
+import os
 
+PORT = int(os.environ.get("PORT", 5000))
 
 #this the number of vertical and horizontal tiles along with the size of each tile square:
 height_grid = 15
